@@ -1,17 +1,45 @@
 "use client";
 
-import { SearchX } from "lucide-react";
+import { SearchX, FileStack, UploadCloud } from "lucide-react";
 import { ExamPaper } from "@/types";
 import { PaperCard } from "./PaperCard";
 
 interface PaperGridProps {
   papers: ExamPaper[];
+  hasAnyPapers: boolean;
   onView: (paper: ExamPaper) => void;
   onReport: (paper: ExamPaper) => void;
   onClearFilters: () => void;
+  onUploadClick: () => void;
 }
 
-export function PaperGrid({ papers, onView, onReport, onClearFilters }: PaperGridProps) {
+export function PaperGrid({
+  papers,
+  hasAnyPapers,
+  onView,
+  onReport,
+  onClearFilters,
+  onUploadClick,
+}: PaperGridProps) {
+  if (papers.length === 0 && !hasAnyPapers) {
+    return (
+      <div className="flex flex-col items-center justify-center border border-dashed border-border py-20 text-center">
+        <FileStack size={22} strokeWidth={1.5} className="text-subtle" />
+        <p className="mt-3 text-[13.5px] font-medium">No papers yet</p>
+        <p className="mt-1 max-w-xs text-[13px] text-muted">
+          Be the first to add one — it&apos;ll show up here immediately.
+        </p>
+        <button
+          onClick={onUploadClick}
+          className="mt-4 flex items-center gap-1.5 border border-foreground bg-foreground px-3 py-1.5 text-[13px] font-medium text-background transition-colors hover:bg-foreground/85"
+        >
+          <UploadCloud size={13} strokeWidth={2} />
+          Upload a paper
+        </button>
+      </div>
+    );
+  }
+
   if (papers.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center border border-dashed border-border py-20 text-center">

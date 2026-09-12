@@ -10,7 +10,6 @@ import { ReportModal } from "@/components/ReportModal";
 import { LegalModal, type LegalDoc } from "@/components/LegalModal";
 import { InfoSections } from "@/components/InfoSections";
 import { Footer } from "@/components/Footer";
-import { MOCK_PAPERS } from "@/data/mock-papers";
 import { ExamPaper } from "@/types";
 
 const EMPTY_FILTERS: Filters = {
@@ -22,7 +21,7 @@ const EMPTY_FILTERS: Filters = {
 };
 
 export default function Home() {
-  const [papers, setPapers] = useState<ExamPaper[]>(MOCK_PAPERS);
+  const [papers, setPapers] = useState<ExamPaper[]>([]);
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
 
   const [viewingPaper, setViewingPaper] = useState<ExamPaper | null>(null);
@@ -67,9 +66,11 @@ export default function Home() {
 
         <PaperGrid
           papers={filteredPapers}
+          hasAnyPapers={papers.length > 0}
           onView={setViewingPaper}
           onReport={setReportingPaper}
           onClearFilters={() => setFilters(EMPTY_FILTERS)}
+          onUploadClick={() => setUploadOpen(true)}
         />
       </main>
 
