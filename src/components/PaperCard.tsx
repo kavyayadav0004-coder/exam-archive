@@ -14,7 +14,7 @@ export function PaperCard({ paper, onView, onReport }: PaperCardProps) {
   const FileIcon = paper.fileKind === "pdf" ? FileText : ImageIcon;
 
   return (
-    <div className="group flex flex-col border border-border bg-background transition-colors hover:border-border-strong">
+    <div className="group flex flex-col border border-border bg-background transition-[border-color,box-shadow] duration-150 hover:border-border-strong hover:shadow-[0_2px_10px_rgba(0,0,0,0.06)]">
       <div className="flex items-start justify-between gap-2 border-b border-border p-3">
         <div className="flex min-w-0 items-start gap-2">
           <FileIcon size={16} strokeWidth={1.75} className="mt-0.5 shrink-0 text-subtle" />
@@ -48,8 +48,7 @@ export function PaperCard({ paper, onView, onReport }: PaperCardProps) {
           View
         </button>
         <a
-          href="#"
-          onClick={(e) => e.preventDefault()}
+          href={paper.fileUrl}
           download={paper.fileName}
           className="flex flex-1 items-center justify-center gap-1.5 border-r border-border py-2 text-[12.5px] font-medium transition-colors hover:bg-surface"
         >

@@ -54,6 +54,9 @@ export interface ExamPaper {
   fileSizeKb: number;
   pages: number;
   downloads: number;
+  /** URL the file can actually be viewed/downloaded from — a /public path for
+   *  seeded papers, or an object URL (URL.createObjectURL) for a live upload. */
+  fileUrl: string;
 }
 
 export interface ReportReason {

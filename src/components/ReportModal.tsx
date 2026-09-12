@@ -83,7 +83,7 @@ export function ReportModal({ paper, onClose }: ReportModalProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@school.edu"
-            className="h-9 border border-border px-2.5 text-[13px] focus:border-foreground"
+            className="h-9 border border-border px-2.5 text-[13px] transition-colors focus:border-foreground"
           />
         </label>
 
@@ -96,7 +96,7 @@ export function ReportModal({ paper, onClose }: ReportModalProps) {
             onChange={(e) => setDetails(e.target.value)}
             rows={3}
             placeholder="Anything that helps us verify and act on this report"
-            className="resize-none border border-border px-2.5 py-2 text-[13px] focus:border-foreground"
+            className="resize-none border border-border px-2.5 py-2 text-[13px] transition-colors focus:border-foreground"
           />
         </label>
 

@@ -78,8 +78,9 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
       uploadDate: new Date().toISOString().slice(0, 10),
       fileKind: file.type === "application/pdf" ? "pdf" : "image",
       fileName: file.name,
+      fileUrl: URL.createObjectURL(file),
       fileSizeKb: Math.max(1, Math.round(file.size / 1024)),
-      pages: file.type === "application/pdf" ? 1 : 1,
+      pages: 1,
       downloads: 0,
     };
 
@@ -104,7 +105,7 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="DPS Sushant Lok - Half Yearly 2025"
-            className="h-9 border border-border px-2.5 text-[13px] focus:border-foreground"
+            className="h-9 border border-border px-2.5 text-[13px] transition-colors focus:border-foreground"
           />
         </label>
 
@@ -117,7 +118,7 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
             value={school}
             onChange={(e) => setSchool(e.target.value)}
             placeholder="Delhi Public School, Sushant Lok"
-            className="h-9 border border-border px-2.5 text-[13px] focus:border-foreground"
+            className="h-9 border border-border px-2.5 text-[13px] transition-colors focus:border-foreground"
           />
         </label>
 
@@ -128,7 +129,7 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
               required
               value={cls}
               onChange={(e) => setCls(e.target.value ? Number(e.target.value) : "")}
-              className="h-9 border border-border bg-background px-2 text-[13px] focus:border-foreground"
+              className="h-9 border border-border bg-background px-2 text-[13px] transition-colors focus:border-foreground"
             >
               <option value="">Select</option>
               {CLASSES.map((c) => (
@@ -145,7 +146,7 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
               required
               value={board}
               onChange={(e) => setBoard(e.target.value as BoardType)}
-              className="h-9 border border-border bg-background px-2 text-[13px] focus:border-foreground"
+              className="h-9 border border-border bg-background px-2 text-[13px] transition-colors focus:border-foreground"
             >
               <option value="">Select</option>
               {BOARDS.map((b) => (
@@ -162,7 +163,7 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
               required
               value={subject}
               onChange={(e) => setSubject(e.target.value as SubjectType)}
-              className="h-9 border border-border bg-background px-2 text-[13px] focus:border-foreground"
+              className="h-9 border border-border bg-background px-2 text-[13px] transition-colors focus:border-foreground"
             >
               <option value="">Select</option>
               {SUBJECTS.map((s) => (
@@ -179,7 +180,7 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
               required
               value={examType}
               onChange={(e) => setExamType(e.target.value as ExamType)}
-              className="h-9 border border-border bg-background px-2 text-[13px] focus:border-foreground"
+              className="h-9 border border-border bg-background px-2 text-[13px] transition-colors focus:border-foreground"
             >
               <option value="">Select</option>
               {EXAM_TYPES.map((t) => (

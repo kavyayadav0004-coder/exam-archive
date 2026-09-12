@@ -42,6 +42,13 @@
 
 html {
   color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -89,8 +96,24 @@ body {
   animation: modal-in 0.12s ease-out;
 }
 
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-dropdown-in {
+  animation: dropdown-in 0.09s ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-modal-in {
+  .animate-modal-in,
+  .animate-dropdown-in {
     animation: none;
   }
 }

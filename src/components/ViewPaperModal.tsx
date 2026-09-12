@@ -1,6 +1,7 @@
 "use client";
 
-import { Download, FileText, ImageIcon } from "lucide-react";
+import { useState } from "react";
+import { Download, AlertTriangle } from "lucide-react";
 import { ExamPaper } from "@/types";
 import { Modal } from "./Modal";
 import { formatDate, formatFileSize } from "@/lib/utils";
@@ -11,24 +12,23 @@ interface ViewPaperModalProps {
 }
 
 export function ViewPaperModal({ paper, onClose }: ViewPaperModalProps) {
-  const FileIcon = paper.fileKind === "pdf" ? FileText : ImageIcon;
+  const [loadFailed, setLoadFailed] = useState(false);
 
   return (
     <Modal
       title={paper.title}
       subtitle={paper.school}
       onClose={onClose}
-      widthClass="max-w-2xl"
+      widthClass="max-w-3xl"
       footer={
         <div className="flex items-center justify-between">
           <span className="mono-badge text-subtle">
             {paper.fileName} &middot; {formatFileSize(paper.fileSizeKb)}
           </span>
           <a
-            href="#"
-            onClick={(e) => e.preventDefault()}
+            href={paper.fileUrl}
             download={paper.fileName}
-            className="flex h-8 items-center gap-1.5 border border-foreground bg-foreground px-3 text-[13px] font-medium text-background hover:bg-foreground/85"
+            className="flex h-8 items-center gap-1.5 border border-foreground bg-foreground px-3 text-[13px] font-medium text-background transition-colors hover:bg-foreground/85"
           >
             <Download size={13} strokeWidth={2} />
             Download
@@ -52,17 +52,31 @@ export function ViewPaperModal({ paper, onClose }: ViewPaperModalProps) {
           </span>
         </div>
 
-        <div className="mt-4 flex flex-col items-center justify-center gap-3 border border-dashed border-border bg-surface py-16 text-center">
-          <FileIcon size={30} strokeWidth={1.25} className="text-subtle" />
-          <div>
-            <p className="text-[13px] font-medium">
-              Preview unavailable in this demo
-            </p>
-            <p className="mt-1 max-w-xs text-[12.5px] text-muted">
-              In production this pane renders the {paper.fileKind === "pdf" ? "PDF" : "image"}{" "}
-              inline, page by page ({paper.pages} page{paper.pages === 1 ? "" : "s"} total).
-            </p>
-          </div>
+        <div className="mt-4 overflow-hidden border border-border bg-surface">
+          {loadFailed ? (
+            <div className="flex flex-col items-center justify-center gap-2 py-16 text-center">
+              <AlertTriangle size={22} strokeWidth={1.5} className="text-subtle" />
+              <p className="text-[13px] font-medium">Couldn&apos;t load the preview</p>
+              <p className="max-w-xs text-[12.5px] text-muted">
+                Try the download button below instead.
+              </p>
+            </div>
+          ) : paper.fileKind === "pdf" ? (
+            <iframe
+              src={`${paper.fileUrl}#toolbar=0`}
+              title={paper.title}
+              className="h-[65vh] w-full"
+              onError={() => setLoadFailed(true)}
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={paper.fileUrl}
+              alt={paper.title}
+              className="mx-auto max-h-[65vh] w-auto object-contain"
+              onError={() => setLoadFailed(true)}
+            />
+          )}
         </div>
 
         <dl className="mt-4 grid grid-cols-2 gap-y-2 border-t border-border pt-3 text-[12.5px] sm:grid-cols-3">

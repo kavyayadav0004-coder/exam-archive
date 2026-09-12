@@ -61,7 +61,7 @@ export function FilterDropdown<T extends string | number>({
       </button>
 
       {open && (
-        <div className="absolute left-0 z-40 mt-1 max-h-64 w-48 overflow-y-auto border border-border bg-background py-1 shadow-[0_4px_16px_rgba(0,0,0,0.08)] scrollbar-thin">
+        <div className="animate-dropdown-in absolute left-0 z-40 mt-1 max-h-64 w-48 overflow-y-auto border border-border bg-background py-1 shadow-[0_4px_16px_rgba(0,0,0,0.08)] scrollbar-thin">
           {selected.length > 0 && (
             <button
               onClick={() => onChange([])}

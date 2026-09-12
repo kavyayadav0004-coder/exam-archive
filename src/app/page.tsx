@@ -8,6 +8,7 @@ import { ViewPaperModal } from "@/components/ViewPaperModal";
 import { UploadModal } from "@/components/UploadModal";
 import { ReportModal } from "@/components/ReportModal";
 import { LegalModal, type LegalDoc } from "@/components/LegalModal";
+import { InfoSections } from "@/components/InfoSections";
 import { Footer } from "@/components/Footer";
 import { MOCK_PAPERS } from "@/data/mock-papers";
 import { ExamPaper } from "@/types";
@@ -71,6 +72,8 @@ export default function Home() {
           onClearFilters={() => setFilters(EMPTY_FILTERS)}
         />
       </main>
+
+      <InfoSections onUploadClick={() => setUploadOpen(true)} />
 
       <Footer onOpenLegal={setLegalDoc} />
 

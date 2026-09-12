@@ -44,7 +44,7 @@ export function FilterBar({ filters, onChange, resultCount }: FilterBarProps) {
             value={filters.query}
             onChange={(e) => onChange({ ...filters, query: e.target.value })}
             placeholder="Search by title, subject, or school name"
-            className="h-9 w-full border border-border bg-background pl-9 pr-9 text-[13px] placeholder:text-subtle focus:border-foreground"
+            className="h-9 w-full border border-border bg-background pl-9 pr-9 text-[13px] placeholder:text-subtle transition-colors focus:border-foreground"
           />
           {filters.query && (
             <button
