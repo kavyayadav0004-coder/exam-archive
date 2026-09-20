@@ -48,7 +48,7 @@ export function PaperCard({ paper, onView, onReport }: PaperCardProps) {
           View
         </button>
         <a
-          href={paper.fileUrl}
+          href={`${paper.fileUrl}?download=${encodeURIComponent(paper.fileName)}`}
           download={paper.fileName}
           className="flex flex-1 items-center justify-center gap-1.5 border-r border-border py-2 text-[12.5px] font-medium transition-colors hover:bg-surface"
         >

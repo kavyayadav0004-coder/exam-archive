@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { FilterBar, type Filters } from "@/components/FilterBar";
 import { PaperGrid } from "@/components/PaperGrid";
@@ -11,6 +11,7 @@ import { LegalModal, type LegalDoc } from "@/components/LegalModal";
 import { InfoSections } from "@/components/InfoSections";
 import { Footer } from "@/components/Footer";
 import { ExamPaper } from "@/types";
+import { fetchPapers, uploadPaper, type NewPaperInput } from "@/lib/papers";
 
 const EMPTY_FILTERS: Filters = {
   query: "",
@@ -22,6 +23,8 @@ const EMPTY_FILTERS: Filters = {
 
 export default function Home() {
   const [papers, setPapers] = useState<ExamPaper[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
 
   const [viewingPaper, setViewingPaper] = useState<ExamPaper | null>(null);
@@ -29,6 +32,13 @@ export default function Home() {
   const [uploadOpen, setUploadOpen] = useState(false);
   const [legalDoc, setLegalDoc] = useState<LegalDoc | null>(null);
   const [justUploadedId, setJustUploadedId] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchPapers()
+      .then(setPapers)
+      .catch(() => setLoadError("Couldn't load papers. Refresh to try again."))
+      .finally(() => setLoading(false));
+  }, []);
 
   const filteredPapers = useMemo(() => {
     const q = filters.query.trim().toLowerCase();
@@ -45,7 +55,8 @@ export default function Home() {
     });
   }, [papers, filters]);
 
-  function handleUpload(paper: ExamPaper) {
+  async function handleUpload(input: NewPaperInput) {
+    const paper = await uploadPaper(input); // throws on failure, the modal shows the error
     setPapers((prev) => [paper, ...prev]);
     setUploadOpen(false);
     setJustUploadedId(paper.id);
@@ -60,18 +71,28 @@ export default function Home() {
       <main id="browse" className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-5 sm:px-6">
         {justUploadedId && (
           <div className="mb-4 border border-success bg-success-bg px-3 py-2 text-[13px] text-success">
-            Paper uploaded. It&apos;s live in the grid below and queued for moderator review.
+            Paper uploaded. It&apos;s live in the grid below.
           </div>
         )}
 
-        <PaperGrid
-          papers={filteredPapers}
-          hasAnyPapers={papers.length > 0}
-          onView={setViewingPaper}
-          onReport={setReportingPaper}
-          onClearFilters={() => setFilters(EMPTY_FILTERS)}
-          onUploadClick={() => setUploadOpen(true)}
-        />
+        {loadError && (
+          <div className="mb-4 border border-danger bg-danger-bg px-3 py-2 text-[13px] text-danger">
+            {loadError}
+          </div>
+        )}
+
+        {loading ? (
+          <p className="py-20 text-center text-[13px] text-muted">Loading papers...</p>
+        ) : (
+          <PaperGrid
+            papers={filteredPapers}
+            hasAnyPapers={papers.length > 0}
+            onView={setViewingPaper}
+            onReport={setReportingPaper}
+            onClearFilters={() => setFilters(EMPTY_FILTERS)}
+            onUploadClick={() => setUploadOpen(true)}
+          />
+        )}
       </main>
 
       <InfoSections onUploadClick={() => setUploadOpen(true)} />

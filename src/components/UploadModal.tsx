@@ -6,17 +6,17 @@ import {
   BOARDS,
   CLASSES,
   EXAM_TYPES,
-  ExamPaper,
   SUBJECTS,
   type BoardType,
   type ExamType,
   type SubjectType,
 } from "@/types";
+import type { NewPaperInput } from "@/lib/papers";
 import { Modal } from "./Modal";
 
 interface UploadModalProps {
   onClose: () => void;
-  onUpload: (paper: ExamPaper) => void;
+  onUpload: (input: NewPaperInput) => Promise<void>;
 }
 
 const ACCEPTED_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
@@ -32,6 +32,8 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
   const [confirmed, setConfirmed] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [fileError, setFileError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const canSubmit =
@@ -63,28 +65,27 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
     validateAndSetFile(e.dataTransfer.files?.[0]);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!canSubmit || !file) return;
-
-    const paper: ExamPaper = {
-      id: `p-${Date.now()}`,
-      title: title.trim(),
-      school: school.trim() || "Unnamed school",
-      class: Number(cls),
-      board: board as BoardType,
-      subject: subject as SubjectType,
-      examType: examType as ExamType,
-      uploadDate: new Date().toISOString().slice(0, 10),
-      fileKind: file.type === "application/pdf" ? "pdf" : "image",
-      fileName: file.name,
-      fileUrl: URL.createObjectURL(file),
-      fileSizeKb: Math.max(1, Math.round(file.size / 1024)),
-      pages: 1,
-      downloads: 0,
-    };
-
-    onUpload(paper);
+    if (!canSubmit || !file || submitting) return;
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      await onUpload({
+        title: title.trim(),
+        school: school.trim(),
+        class: Number(cls),
+        board: board as BoardType,
+        subject: subject as SubjectType,
+        examType: examType as ExamType,
+        file,
+      });
+        } catch (err) {
+          console.error(err);
+          const msg = (err as { message?: string })?.message ?? "unknown error";
+          setSubmitError(`Upload failed: ${msg}`);
+          setSubmitting(false);
+        }
   }
 
   const FileIcon = file?.type === "application/pdf" ? FileText : ImageIcon;
@@ -92,7 +93,7 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
   return (
     <Modal
       title="Upload a paper"
-      subtitle="Papers are reviewed by moderators before appearing to the wider archive."
+      subtitle="Anyone can view papers you upload. Make sure you have the right to share it."
       onClose={onClose}
       widthClass="max-w-xl"
     >
@@ -256,6 +257,8 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
           </span>
         </label>
 
+        {submitError && <p className="text-[12.5px] text-danger">{submitError}</p>}
+
         <div className="flex items-center justify-end gap-2 border-t border-border pt-3">
           <button
             type="button"
@@ -266,10 +269,10 @@ export function UploadModal({ onClose, onUpload }: UploadModalProps) {
           </button>
           <button
             type="submit"
-            disabled={!canSubmit}
+            disabled={!canSubmit || submitting}
             className="h-8 border border-foreground bg-foreground px-3 text-[13px] font-medium text-background disabled:cursor-not-allowed disabled:border-border disabled:bg-border disabled:text-subtle"
           >
-            Upload paper
+            {submitting ? "Uploading..." : "Upload paper"}
           </button>
         </div>
       </form>

@@ -26,7 +26,7 @@ export function ViewPaperModal({ paper, onClose }: ViewPaperModalProps) {
             {paper.fileName} &middot; {formatFileSize(paper.fileSizeKb)}
           </span>
           <a
-            href={paper.fileUrl}
+            href={`${paper.fileUrl}?download=${encodeURIComponent(paper.fileName)}`}
             download={paper.fileName}
             className="flex h-8 items-center gap-1.5 border border-foreground bg-foreground px-3 text-[13px] font-medium text-background transition-colors hover:bg-foreground/85"
           >
