@@ -34,10 +34,22 @@ export default function Home() {
   const [justUploadedId, setJustUploadedId] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     fetchPapers()
-      .then(setPapers)
-      .catch(() => setLoadError("Couldn't load papers. Refresh to try again."))
-      .finally(() => setLoading(false));
+      .then((rows) => {
+        console.log("fetched rows:", rows.length);
+        if (!cancelled) setPapers(rows);
+      })
+      .catch((err) => {
+        console.error("fetch error:", err);
+        if (!cancelled) setLoadError("Couldn't load papers. Refresh to try again.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const filteredPapers = useMemo(() => {
