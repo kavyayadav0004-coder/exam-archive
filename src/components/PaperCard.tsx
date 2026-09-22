@@ -52,7 +52,7 @@ export function PaperCard({ paper, onView, onReport }: PaperCardProps) {
           <Eye size={13} strokeWidth={2} />
           View
         </button>
-        
+        <a
           href={paper.fileUrl}
           download={paper.fileName}
           className="flex flex-1 items-center justify-center gap-1.5 border-r border-border py-2 text-[12.5px] font-medium transition-colors hover:bg-surface"

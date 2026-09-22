@@ -18,7 +18,7 @@ export function Footer({ onOpenLegal }: FooterProps) {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-3 px-4 py-6 sm:flex-row sm:items-center sm:px-6">
         <p className="mono-badge text-subtle">
-          prior<span className="stamp-dot">.</span> &middot; student-contributed, reviewed before it's live
+          prior<span className="stamp-dot">.</span> &middot; student-contributed, reviewed before it&apos;s live
         </p>
         <nav className="flex flex-wrap gap-x-5 gap-y-2">
           {LINKS.map((link) => (

@@ -27,7 +27,7 @@ export function Navbar({ onUploadClick, paperCount }: NavbarProps) {
           </a>
           <nav className="hidden items-center gap-6 md:flex">
             {NAV_LINKS.map((link) => (
-              
+              <a
                 key={link.label}
                 href={link.href}
                 className="text-[13px] text-muted transition-colors hover:text-foreground"
