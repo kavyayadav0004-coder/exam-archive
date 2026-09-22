@@ -25,16 +25,16 @@ export function PaperGrid({
     return (
       <div className="flex flex-col items-center justify-center border border-dashed border-border py-20 text-center">
         <FileStack size={22} strokeWidth={1.5} className="text-subtle" />
-        <p className="mt-3 text-[13.5px] font-medium">No papers yet</p>
+        <p className="mt-3 text-[13.5px] font-medium">Nothing on the record yet</p>
         <p className="mt-1 max-w-xs text-[13px] text-muted">
-          Be the first to add one — it&apos;ll show up here immediately.
+          Be the first entry. It goes live the moment you upload.
         </p>
         <button
           onClick={onUploadClick}
-          className="mt-4 flex items-center gap-1.5 border border-foreground bg-foreground px-3 py-1.5 text-[13px] font-medium text-background transition-colors hover:bg-foreground/85"
+          className="mt-4 flex items-center gap-1.5 border border-signal bg-signal px-3 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-signal/90"
         >
           <UploadCloud size={13} strokeWidth={2} />
-          Upload a paper
+          Add a paper
         </button>
       </div>
     );
@@ -44,10 +44,8 @@ export function PaperGrid({
     return (
       <div className="flex flex-col items-center justify-center border border-dashed border-border py-20 text-center">
         <SearchX size={22} strokeWidth={1.5} className="text-subtle" />
-        <p className="mt-3 text-[13.5px] font-medium">No papers match these filters</p>
-        <p className="mt-1 text-[13px] text-muted">
-          Try a different subject, class, or search term.
-        </p>
+        <p className="mt-3 text-[13.5px] font-medium">Nothing matches, yet</p>
+        <p className="mt-1 text-[13px] text-muted">Try a different subject, class, or search term.</p>
         <button
           onClick={onClearFilters}
           className="mt-4 border border-border px-3 py-1.5 text-[13px] hover:border-border-strong hover:bg-surface"

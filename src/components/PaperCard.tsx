@@ -3,6 +3,7 @@
 import { Download, Eye, Flag, FileText, ImageIcon } from "lucide-react";
 import { ExamPaper } from "@/types";
 import { formatDate, formatFileSize } from "@/lib/utils";
+import { serialFor } from "@/lib/serial";
 
 interface PaperCardProps {
   paper: ExamPaper;
@@ -31,10 +32,14 @@ export function PaperCard({ paper, onView, onReport }: PaperCardProps) {
         <Tag>Class {paper.class}</Tag>
         <Tag>{paper.board}</Tag>
         <Tag>{paper.subject}</Tag>
-        <Tag emphasis>{paper.examType}</Tag>
+        <Tag signal>{paper.examType}</Tag>
       </div>
 
-      <div className="mono-badge flex items-center justify-between px-3 pb-3 pt-2.5 text-subtle">
+      <div className="mono-badge flex items-center justify-between px-3 pt-2.5 text-subtle">
+        <span>{serialFor(paper)}</span>
+      </div>
+
+      <div className="mono-badge flex items-center justify-between px-3 pb-3 pt-1.5 text-subtle">
         <span>{formatDate(paper.uploadDate)}</span>
         <span>{formatFileSize(paper.fileSizeKb)}</span>
       </div>
@@ -47,8 +52,8 @@ export function PaperCard({ paper, onView, onReport }: PaperCardProps) {
           <Eye size={13} strokeWidth={2} />
           View
         </button>
-        <a
-          href={`${paper.fileUrl}?download=${encodeURIComponent(paper.fileName)}`}
+        
+          href={paper.fileUrl}
           download={paper.fileName}
           className="flex flex-1 items-center justify-center gap-1.5 border-r border-border py-2 text-[12.5px] font-medium transition-colors hover:bg-surface"
         >
@@ -68,12 +73,12 @@ export function PaperCard({ paper, onView, onReport }: PaperCardProps) {
   );
 }
 
-function Tag({ children, emphasis }: { children: React.ReactNode; emphasis?: boolean }) {
+function Tag({ children, signal }: { children: React.ReactNode; signal?: boolean }) {
   return (
     <span
       className={
-        emphasis
-          ? "mono-badge border border-foreground bg-foreground px-1.5 py-0.5 text-background"
+        signal
+          ? "mono-badge border border-signal bg-signal px-1.5 py-0.5 text-white"
           : "mono-badge border border-border px-1.5 py-0.5 text-muted"
       }
     >

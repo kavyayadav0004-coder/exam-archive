@@ -4,16 +4,12 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Exam Archive - Past Papers by Class, Board & Subject",
+  title: "prior — Know what's coming",
   description:
-    "A searchable, community-uploaded repository of school exam papers filterable by class, board, subject, and exam type.",
-  applicationName: "Exam Archive",
+    "The largest library of real school exam papers, uploaded by the students who sat them. Filterable by class, board, subject, and exam type.",
+  applicationName: "prior",
   manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Exam Archive",
-  },
+  appleWebApp: { capable: true, statusBarStyle: "default", title: "prior" },
   icons: {
     icon: [
       { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
@@ -21,9 +17,14 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" }],
   },
-  formatDetection: {
-    telephone: false,
-  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#0a0a0a",
 };
 
 export const viewport: Viewport = {

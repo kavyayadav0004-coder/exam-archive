@@ -5,18 +5,18 @@ import { Search, Eye, Flag, UploadCloud } from "lucide-react";
 const STEPS = [
   {
     icon: Search,
-    title: "Search & filter",
-    body: "Filter by class, board, subject, and exam type, or search titles and school names directly.",
+    title: "Find the pattern",
+    body: "Filter by class, board, subject, and exam type. Every school has a type of question it keeps asking.",
   },
   {
     icon: Eye,
-    title: "View or download",
-    body: "Preview a paper inline before you commit, or download the file straight to your device.",
+    title: "Read it before you sit it",
+    body: "Preview inline, or download straight to your device.",
   },
   {
     icon: Flag,
-    title: "Report if something's wrong",
-    body: "Every card has a report button for papers with personal data, answer keys, or incorrect tags.",
+    title: "Flag what's wrong",
+    body: "Every card has a report button — personal data, answer keys, or bad tags get pulled fast.",
   },
 ];
 
@@ -29,7 +29,7 @@ export function InfoSections({ onUploadClick }: InfoSectionsProps) {
     <>
       <section id="how-it-works" className="border-t border-border">
         <div className="mx-auto max-w-[1400px] px-4 py-10 sm:px-6">
-          <h2 className="text-[16px] font-semibold">How it works</h2>
+          <h2 className="text-[16px] font-semibold">Your teacher has a type. This is how you find it.</h2>
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
             {STEPS.map((step) => (
               <div key={step.title} className="border border-border p-4">
@@ -45,19 +45,19 @@ export function InfoSections({ onUploadClick }: InfoSectionsProps) {
       <section id="contribute" className="border-t border-border bg-surface">
         <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-4 px-4 py-10 sm:flex-row sm:items-center sm:px-6">
           <div>
-            <h2 className="text-[16px] font-semibold">Contribute a paper</h2>
+            <h2 className="text-[16px] font-semibold">Put one on the record</h2>
             <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-muted">
-              Have a past paper sitting on your laptop? Upload it in under a minute — just
-              tag the class, board, subject, and exam type, and confirm it&apos;s free of
-              personal information.
+              Upload a paper in under a minute — tag the class, board, subject, and exam type,
+              and confirm it&apos;s free of personal information. Every three papers you unlock
+              earns you a Contributor mark.
             </p>
           </div>
           <button
             onClick={onUploadClick}
-            className="flex h-9 shrink-0 items-center gap-1.5 border border-foreground bg-foreground px-4 text-[13px] font-medium text-background transition-colors hover:bg-foreground/85"
+            className="flex h-9 shrink-0 items-center gap-1.5 border border-signal bg-signal px-4 text-[13px] font-medium text-white transition-colors hover:bg-signal/90"
           >
             <UploadCloud size={14} strokeWidth={2} />
-            Upload a paper
+            Add a paper
           </button>
         </div>
       </section>

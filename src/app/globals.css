@@ -11,6 +11,8 @@
   --surface-hover: #f2f2f2;
   --accent: #0a0a0a;
   --accent-foreground: #ffffff;
+  --signal: #e5341d;
+  --signal-bg: #fdf0ef;
   --danger: #b3261e;
   --danger-bg: #fdf0ef;
   --success: #0f6b3f;
@@ -28,6 +30,8 @@
   --color-surface-hover: var(--surface-hover);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-signal: var(--signal);
+  --color-signal-bg: var(--signal-bg);
   --color-danger: var(--danger);
   --color-danger-bg: var(--danger-bg);
   --color-success: var(--success);
@@ -36,19 +40,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-* {
-  border-color: var(--border);
-}
+* { border-color: var(--border); }
 
-html {
-  color-scheme: light;
-  scroll-behavior: smooth;
-}
+html { color-scheme: light; scroll-behavior: smooth; }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
 }
 
 body {
@@ -58,10 +55,7 @@ body {
   font-size: 14px;
 }
 
-::selection {
-  background: #0a0a0a;
-  color: #ffffff;
-}
+::selection { background: #0a0a0a; color: #ffffff; }
 
 .mono-badge {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
@@ -69,56 +63,27 @@ body {
   letter-spacing: 0.01em;
 }
 
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 0;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* stamp mark — used on the wordmark and serial codes */
+.stamp-dot { color: var(--signal); }
+
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 0; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
 
 @keyframes modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.99);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(4px) scale(0.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
-
-.animate-modal-in {
-  animation: modal-in 0.12s ease-out;
-}
+.animate-modal-in { animation: modal-in 0.12s ease-out; }
 
 @keyframes dropdown-in {
-  from {
-    opacity: 0;
-    transform: translateY(-3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-.animate-dropdown-in {
-  animation: dropdown-in 0.09s ease-out;
-}
+.animate-dropdown-in { animation: dropdown-in 0.09s ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-modal-in,
-  .animate-dropdown-in {
-    animation: none;
-  }
+  .animate-modal-in, .animate-dropdown-in { animation: none; }
 }
 
-:focus-visible {
-  outline: 2px solid #0a0a0a;
-  outline-offset: 2px;
-}
+:focus-visible { outline: 2px solid #0a0a0a; outline-offset: 2px; }
