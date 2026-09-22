@@ -1,4 +1,4 @@
-# Exam Archive
+# Prior (previously Exam Archive)
 
 A searchable, community-uploaded repository of school exam papers, filterable by class, board, subject, and exam type. Built with Next.js 15, TypeScript, Tailwind CSS, and Lucide icons.
 
