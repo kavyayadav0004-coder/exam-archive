@@ -31,13 +31,12 @@ export default function Home() {
   const [reportingPaper, setReportingPaper] = useState<ExamPaper | null>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
   const [legalDoc, setLegalDoc] = useState<LegalDoc | null>(null);
-  const [justUploadedId, setJustUploadedId] = useState<string | null>(null);
+  const [justSubmitted, setJustSubmitted] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     fetchPapers()
       .then((rows) => {
-        console.log("fetched rows:", rows.length);
         if (!cancelled) setPapers(rows);
       })
       .catch((err) => {
@@ -68,11 +67,10 @@ export default function Home() {
   }, [papers, filters]);
 
   async function handleUpload(input: NewPaperInput) {
-    const paper = await uploadPaper(input); // throws on failure, the modal shows the error
-    setPapers((prev) => [paper, ...prev]);
+    await uploadPaper(input); // throws on failure, the modal shows the error
     setUploadOpen(false);
-    setJustUploadedId(paper.id);
-    window.setTimeout(() => setJustUploadedId(null), 4000);
+    setJustSubmitted(true);
+    window.setTimeout(() => setJustSubmitted(false), 6000);
   }
 
   return (
@@ -81,9 +79,9 @@ export default function Home() {
       <FilterBar filters={filters} onChange={setFilters} resultCount={filteredPapers.length} />
 
       <main id="browse" className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-5 sm:px-6">
-        {justUploadedId && (
+        {justSubmitted && (
           <div className="mb-4 border border-success bg-success-bg px-3 py-2 text-[13px] text-success">
-            Paper uploaded. It&apos;s live in the grid below.
+            Paper submitted. It&apos;ll appear here once it&apos;s reviewed.
           </div>
         )}
 

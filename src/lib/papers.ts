@@ -1,7 +1,6 @@
 import { supabase } from "./supabase";
 import type { BoardType, ExamPaper, ExamType, SubjectType } from "@/types";
 
-const BUCKET = "papers";
 const TABLE = "papers";
 
 export interface NewPaperInput {
@@ -38,48 +37,30 @@ export async function fetchPapers(): Promise<ExamPaper[]> {
   const { data, error } = await supabase
     .from(TABLE)
     .select("*")
+    .eq("status", "approved")
     .order("upload_date", { ascending: false })
     .limit(500);
   if (error) throw error;
   return (data ?? []).map(fromRow);
 }
 
-export async function uploadPaper(input: NewPaperInput): Promise<ExamPaper> {
-  const { file } = input;
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `${crypto.randomUUID()}-${safeName}`;
+export async function uploadPaper(input: NewPaperInput): Promise<void> {
+  const formData = new FormData();
+  formData.append("title", input.title);
+  formData.append("school", input.school);
+  formData.append("class", String(input.class));
+  formData.append("board", input.board);
+  formData.append("subject", input.subject);
+  formData.append("examType", input.examType);
+  formData.append("file", input.file);
 
-  const { error: upErr } = await supabase.storage
-    .from(BUCKET)
-    .upload(path, file, { contentType: file.type, upsert: false });
-  if (upErr) throw upErr;
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    body: formData,
+  });
 
-  const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
-
-  const { data, error } = await supabase
-    .from(TABLE)
-    .insert({
-      title: input.title,
-      school: input.school || "Unnamed school",
-      class: input.class,
-      board: input.board,
-      subject: input.subject,
-      exam_type: input.examType,
-      upload_date: new Date().toISOString().slice(0, 10),
-      file_kind: file.type === "application/pdf" ? "pdf" : "image",
-      file_name: file.name,
-      file_size_kb: Math.max(1, Math.round(file.size / 1024)),
-      pages: 1,
-      downloads: 0,
-      file_url: pub.publicUrl,
-      storage_path: path,
-    })
-    .select()
-    .single();
-
-  if (error) {
-    await supabase.storage.from(BUCKET).remove([path]);
-    throw error;
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error ?? `Upload failed (${res.status})`);
   }
-  return fromRow(data);
 }

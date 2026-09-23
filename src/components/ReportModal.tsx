@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { ExamPaper, REPORT_REASONS } from "@/types";
 import { Modal } from "./Modal";
+import { supabase } from "@/lib/supabase";
 
 interface ReportModalProps {
   paper: ExamPaper;
@@ -15,12 +16,27 @@ export function ReportModal({ paper, onClose }: ReportModalProps) {
   const [email, setEmail] = useState("");
   const [details, setDetails] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const canSubmit = reasonId !== "" && email.trim().length > 3;
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (!canSubmit || submitting) return;
+    setSubmitting(true);
+    setSubmitError("");
+    const { error } = await supabase.from("reports").insert({
+      paper_id: paper.id,
+      reason_id: reasonId,
+      reporter_email: email.trim(),
+      details: details.trim() || null,
+    });
+    if (error) {
+      setSubmitError("Couldn't submit the report. Try again.");
+      setSubmitting(false);
+      return;
+    }
     setSubmitted(true);
   }
 
@@ -100,6 +116,8 @@ export function ReportModal({ paper, onClose }: ReportModalProps) {
           />
         </label>
 
+        {submitError && <p className="text-[12.5px] text-danger">{submitError}</p>}
+
         <div className="flex items-center justify-end gap-2 border-t border-border pt-3">
           <button
             type="button"
@@ -110,10 +128,10 @@ export function ReportModal({ paper, onClose }: ReportModalProps) {
           </button>
           <button
             type="submit"
-            disabled={!canSubmit}
+            disabled={!canSubmit || submitting}
             className="h-8 border border-foreground bg-foreground px-3 text-[13px] font-medium text-background disabled:cursor-not-allowed disabled:border-border disabled:bg-border disabled:text-subtle"
           >
-            Submit report
+            {submitting ? "Submitting..." : "Submit report"}
           </button>
         </div>
       </form>
